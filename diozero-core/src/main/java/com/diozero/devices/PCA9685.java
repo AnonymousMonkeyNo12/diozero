@@ -230,7 +230,7 @@ public class PCA9685 extends AbstractDeviceFactory
 		device.writeByteData(MODE1, (byte) (oldmode | RESTART_MASK));
 	}
 
-	private int[] getPwm(int channel) throws RuntimeIOException {
+	public int[] getPwm(int channel) throws RuntimeIOException {
 		validateChannel(channel);
 
 		short on_l = device.readUByte(LED0_ON_L + 4 * channel);
@@ -272,7 +272,7 @@ public class PCA9685 extends AbstractDeviceFactory
 	 * @param off     off time
 	 * @throws RuntimeIOException if an I/O error occurs
 	 */
-	private void setPwm(int channel, int on, int off) throws RuntimeIOException {
+	public void setPwm(int channel, int on, int off) throws RuntimeIOException {
 		validateChannel(channel);
 		validateOnOff(on, off);
 
@@ -296,10 +296,6 @@ public class PCA9685 extends AbstractDeviceFactory
 		}
 		if (off < 0 || off > MAX_VALUE) {
 			throw new IllegalArgumentException(String.format("Error: off (" + off + ") must be 0.." + MAX_VALUE));
-		}
-		// Off must be after on
-		if (off < on) {
-			throw new IllegalArgumentException("Off value (" + off + ") must be > on value (" + on + ")");
 		}
 		// Total must be < 4096
 		if (on + off > MAX_VALUE) {
